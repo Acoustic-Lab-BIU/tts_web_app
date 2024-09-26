@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS Web App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f4f8;
+            color: #333;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #66afe9;
+            outline: none;
+        }
+
+        button {
+            padding: 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        #response {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        img {
+            width: 300px;
+            /* Increased width for a larger logo */
+            margin-bottom: 30px;
+            /* Spacing below the logo */
+        }
+    </style>
+</head>
+
+<body>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+    <h1>ARI Text-to-Speech</h1>
+    <h2>Input Hebrew or English text below for ARI to vocalize</h2>
+    <form id="ttsForm">
+        <input type="text" name="text" placeholder="Enter text here..." required>
+        <button type="submit">Convert to Speech</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('ttsForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            const formData = new FormData(this);
+
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('response').innerText = data.message || data.error;
+                    // Clear the input field after TTS processing
+                    document.querySelector('input[name="text"]').value = '';
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = 'Error: ' + error.message;
+                });
+        });
+    </script>
+</body>
+
+</html>

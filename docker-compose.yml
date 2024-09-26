@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  tts-app:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app # Mount the current directory to /app in the container
+    tty: true
+    # environment:
+    #   FLASK_ENV: development  # Optional: set Flask environment to development
