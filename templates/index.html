@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=dev-width, initial-scale=1.0">
     <title>TTS Web App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -66,16 +66,39 @@
         }
 
         #response {
-            margin-top: 20px;
-            font-size: 1.2em;
+            margin-top: 10px;
+            font-size: 1em;
             color: #333;
+        }
+
+        .examples-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            width: 500px;
+        }
+
+        .examples-container div {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .examples-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 1em;
+            cursor: pointer;
         }
 
         img {
             width: 300px;
-            /* Increased width for a larger logo */
             margin-bottom: 30px;
-            /* Spacing below the logo */
+        }
+
+        h3 {
+            margin-top: 30px;
+            font-size: 1.5em;
         }
     </style>
 </head>
@@ -84,16 +107,37 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
     <h1>ARI Text-to-Speech</h1>
     <h2>Input Hebrew or English text below for ARI to vocalize</h2>
+
     <form id="ttsForm">
         <input type="text" name="text" placeholder="Enter text here..." required>
         <button type="submit">Convert to Speech</button>
+        <div id="response"></div>
     </form>
-    <div id="response"></div>
+
+    <h3>Example Sentences</h3>
+    <div class="examples-container">
+        <div>
+            <button class="example-btn" data-text="Hello, how are you?">Hello, how are you?</button>
+            <button class="example-btn" data-text="It's a beautiful day!">It's a beautiful day!</button>
+            <button class="example-btn" data-text="Can you help me with this?">Can you help me with this?</button>
+            <button class="example-btn" data-text="Where is the nearest cafe?">Where is the nearest cafe?</button>
+            <button class="example-btn" data-text="Good morning, everyone!">Good morning, everyone!</button>
+        </div>
+
+        <div>
+            <button class="example-btn" data-text="שלום, מה שלומך?">שלום, מה שלומך?</button>
+            <button class="example-btn" data-text="זה יום יפה!">זה יום יפה!</button>
+            <button class="example-btn" data-text="אתה יכול לעזור לי בזה?">אתה יכול לעזור לי בזה?</button>
+            <button class="example-btn" data-text="איפה בית הקפה הקרוב ביותר?">איפה בית הקפה הקרוב ביותר?</button>
+            <button class="example-btn" data-text="בוקר טוב לכולם!">בוקר טוב לכולם!</button>
+        </div>
+    </div>
 
     <script>
         document.getElementById('ttsForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the form from submitting normally
+            event.preventDefault();
             const formData = new FormData(this);
+            document.getElementById('response').innerText = "Text-to-speech processing started.";
 
             fetch('/', {
                 method: 'POST',
@@ -107,12 +151,17 @@
                 })
                 .then(data => {
                     document.getElementById('response').innerText = data.message || data.error;
-                    // Clear the input field after TTS processing
                     document.querySelector('input[name="text"]').value = '';
                 })
                 .catch(error => {
                     document.getElementById('response').innerText = 'Error: ' + error.message;
                 });
+        });
+
+        document.querySelectorAll('.example-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelector('input[name="text"]').value = this.getAttribute('data-text');
+            });
         });
     </script>
 </body>
