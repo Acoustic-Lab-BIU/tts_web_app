@@ -11,7 +11,7 @@ sleep 1
 # Open the web app in a new browser window (you can use any browser)
 # Here, we're using Google Chrome as an example; adjust as needed
 firefox --new-window http://localhost:5000 &
-
+firefox http://ari-14c:8080
 # Store the PID of the browser
 BROWSER_PID=$!
 echo $BROWSER_PID
