@@ -1,17 +1,17 @@
-#!/bin/bash
+ #!/bin/bash
 
 # Start the Docker container
 cd /home/lab/Desktop/tts_web_app || exit 
 
-docker compose up -d
+docker compose up 
 
 # Give it a moment to ensure the container is running
 sleep 1
 
 # Open the web app in a new browser window (you can use any browser)
 # Here, we're using Google Chrome as an example; adjust as needed
-firefox http://localhost:5000 &
-firefox http://ari-14c:8080 
+firefox --new-window http://localhost:5000 &
+firefox http://ari-14c:8080
 # Store the PID of the browser
 BROWSER_PID=$!
 echo $BROWSER_PID
