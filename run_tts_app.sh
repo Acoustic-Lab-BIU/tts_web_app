@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Start the Docker container
+cd /home/lab/Desktop/tts_web_app || exit 
+
 docker compose up -d
 
 # Give it a moment to ensure the container is running
